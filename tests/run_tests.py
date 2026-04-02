@@ -659,7 +659,7 @@ def run(filter_group: Optional[str] = None, verbose: bool = False):
 
     WIDTH = 60
 
-    print(f"\n  🏰 MCP-Fortress Test Suite  —  by Avoceous")
+    print(f"\n   MCP-Fortress Test Suite  —  by Avoceous")
     print(f"  {'═' * WIDTH}")
 
     for group, name, fn in tests:
