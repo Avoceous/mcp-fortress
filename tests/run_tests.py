@@ -21,7 +21,7 @@ from typing import Callable, List, Optional
 
 sys.path.insert(0, __import__("pathlib").Path(__file__).parent.parent.__str__())
 
-# ── Imports ──────────────────────────────────────────────────────────────────
+#  Imports 
 
 from mcpshield.core.models import (
     Alert, AlertSeverity, SecurityAction, SecurityDecision,
@@ -35,14 +35,14 @@ from mcpshield.detectors.pii_scanner import PIISecretScanner
 from mcpshield.detectors.tdiv import ToolDescriptionIntegrityVerifier
 from mcpshield.policy.firewall import PolicyFirewall
 
-# ── Tiny assertion helper ─────────────────────────────────────────────────────
+#  Tiny assertion helper 
 
 def chk(condition: bool, message: str = ""):
     if not condition:
         raise AssertionError(message or "Assertion failed")
 
 
-# ── Test registry ─────────────────────────────────────────────────────────────
+# Test registry 
 
 _TESTS: List[tuple] = []   # (group, name, fn)
 
@@ -659,7 +659,7 @@ def run(filter_group: Optional[str] = None, verbose: bool = False):
 
     WIDTH = 60
 
-    print(f"\n   MCP-Fortress Test Suite  —  by Avoceous")
+    print(f"\n   MCP-Fortress Test Suite by Avoceous")
     print(f"  {'═' * WIDTH}")
 
     for group, name, fn in tests:
