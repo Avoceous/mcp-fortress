@@ -1,4 +1,4 @@
-# 🏰 MCP-Fortress
+# MCP-Fortress
 
 **Production-grade security firewall & proxy for AI Agent MCP (Model Context Protocol)**
 
