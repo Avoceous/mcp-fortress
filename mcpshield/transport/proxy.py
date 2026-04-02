@@ -61,7 +61,7 @@ class ProxyServer:
     def __init__(
         self,
         upstream: str,
-        host: str = "0.0.0.0",
+        host: str = "127.0.0.1",
         port: int = 8100,
         config: Optional[str] = None,
         policy: Optional[str] = None,
