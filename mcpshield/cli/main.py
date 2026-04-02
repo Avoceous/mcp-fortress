@@ -151,7 +151,7 @@ def main():
     # --- proxy ---
     p_proxy = subparsers.add_parser("proxy", help="Start security proxy")
     p_proxy.add_argument("--upstream", required=True, help="Upstream MCP server URL or command")
-    p_proxy.add_argument("--host", default="0.0.0.0")
+    p_proxy.add_argument("--host", default="127.0.0.1")
     p_proxy.add_argument("--port", type=int, default=8100)
     p_proxy.add_argument("--config", default="mcp-fortress.yaml")
     p_proxy.add_argument("--policy", default=None)
