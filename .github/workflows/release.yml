@@ -1,0 +1,105 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  test:
+    name: Test before release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run self-contained test suite
+        run: python tests/run_tests.py
+
+  build:
+    name: Build distribution
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install hatch
+        run: pip install hatch
+      - name: Build wheel and sdist
+        run: hatch build
+      - name: Store dist artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  github-release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "MCP-Fortress v${{ steps.version.outputs.version }}"
+          body: |
+            ## MCP-Fortress v${{ steps.version.outputs.version }}
+
+            Production-grade security firewall & proxy for AI Agent MCP.
+            **Author:** Avoceous — https://github.com/Avoceous
+
+            ### Install
+            ```bash
+            pip install mcp-fortress==${{ steps.version.outputs.version }}
+            ```
+
+            ### What's included
+            - TDIV: Tool Description Integrity Verifier
+            - BAD Engine: Behavioral Anomaly Detector
+            - BRE: Blast Radius Estimator (0-100 pre-exec scoring)
+            - PII & Secret Scanner (22+ patterns, redaction)
+            - Cross-Session Threat Correlator
+            - Policy-as-Code Firewall (YAML, hot-reload)
+            - HTTP/SSE Proxy + stdio Proxy
+            - Real-time dashboard at /dashboard
+            - Active vulnerability scanner
+            - 50 passing tests
+
+            See [CHANGELOG.md](CHANGELOG.md) for full details.
+          files: dist/*
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+
+  pypi-publish:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/mcp-fortress/
+    steps:
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # Uses OIDC trusted publishing — no API token needed
+        # Set up at: https://pypi.org/manage/account/publishing/

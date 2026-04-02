@@ -1,0 +1,130 @@
+# MCP-Fortress Policy — Enterprise Security Baseline
+# Drop-in policy for protecting production MCP deployments
+#
+# Usage: mcp-fortress proxy --upstream http://localhost:3000 --policy policy.yaml
+
+rules:
+
+  # =========================================================
+  # CRITICAL BLOCKS — These always block, no exceptions
+  # =========================================================
+
+  - name: "block_path_traversal"
+    description: "Block path traversal attempts (../../)"
+    priority: 1
+    match:
+      arg_pattern: '\.\./|\.\.\\|%2e%2e|%252e%252e'
+    action: BLOCK
+
+  - name: "block_credential_files"
+    description: "Block access to known credential and secret files"
+    priority: 2
+    match:
+      arg_pattern: '\.env$|\.env\.|\.aws/credentials|\.boto|id_rsa|id_ed25519|\.pem$|/etc/shadow|/etc/passwd|authorized_keys|secrets\.ya?ml|secrets\.json'
+    action: BLOCK
+
+  - name: "block_browser_credentials"
+    description: "Block access to browser saved password stores"
+    priority: 3
+    match:
+      arg_pattern: '(?i)(chrome.*login.data|firefox.*logins\.json|keychain|wallet\.dat)'
+    action: BLOCK
+
+  - name: "block_prompt_injection_in_args"
+    description: "Block obvious prompt injection in tool arguments"
+    priority: 4
+    match:
+      arg_pattern: '(?i)(ignore (all |previous |prior )?(instructions?|rules?|constraints?|guidelines?)|(system prompt|you are now|forget (all |that |everything)))'
+    action: BLOCK
+
+  # =========================================================
+  # HIGH-RISK — Require human approval
+  # =========================================================
+
+  - name: "require_approval_shell_exec"
+    description: "Any shell command execution needs approval"
+    priority: 10
+    match:
+      tool_class: "shell_exec"
+    action: REQUIRE_APPROVAL
+
+  - name: "require_approval_code_exec"
+    description: "Code execution needs approval"
+    priority: 11
+    match:
+      tool_class: "code_exec"
+    action: REQUIRE_APPROVAL
+
+  - name: "require_approval_file_delete"
+    description: "File deletion requires approval"
+    priority: 12
+    match:
+      tool_pattern: '(?i)(delete|remove|unlink|rmdir|wipe)'
+    action: REQUIRE_APPROVAL
+
+  - name: "require_approval_db_write"
+    description: "Database write operations need approval"
+    priority: 13
+    match:
+      tool_class: "db_write"
+    action: REQUIRE_APPROVAL
+
+  - name: "require_approval_send_email"
+    description: "Sending emails requires approval (exfiltration risk)"
+    priority: 14
+    match:
+      tool_class: "send_email"
+    action: REQUIRE_APPROVAL
+
+  - name: "require_approval_external_http_post"
+    description: "External HTTP POST (possible exfiltration)"
+    priority: 15
+    match:
+      tool_class: "http_client"
+      arg_pattern: 'https?://(?!localhost|127\.|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)'
+    action: REQUIRE_APPROVAL
+
+  # =========================================================
+  # ALERTS — Allow but flag for review
+  # =========================================================
+
+  - name: "alert_ssh_directory_access"
+    description: "Flag access to SSH directories"
+    priority: 30
+    match:
+      arg_pattern: '\.ssh/'
+    action: ALERT
+
+  - name: "alert_git_config_access"
+    description: "Flag git configuration access (may contain tokens)"
+    priority: 31
+    match:
+      arg_pattern: '\.git/config|\.gitconfig'
+    action: ALERT
+
+  - name: "alert_large_file_read"
+    description: "Reading very large files may indicate data staging"
+    priority: 32
+    match:
+      tool_pattern: '(?i)(read|cat|get)_file'
+      arg_pattern: '(?i)(dump|backup|export|archive|full)'
+    action: ALERT
+
+  - name: "alert_system_directories"
+    description: "Access to system directories is suspicious"
+    priority: 33
+    match:
+      arg_pattern: '(/proc/|/sys/|/dev/|\\windows\\system32)'
+    action: ALERT
+
+  # =========================================================
+  # ALLOW — Explicit allowlist for safe operations
+  # =========================================================
+
+  - name: "allow_workspace_reads"
+    description: "Always allow reads within /workspace"
+    priority: 50
+    match:
+      tool_class: "fs_read"
+      arg_pattern: '^/workspace/'
+    action: ALLOW

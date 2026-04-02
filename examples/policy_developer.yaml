@@ -1,0 +1,72 @@
+# MCP-Fortress Policy — Developer Workstation
+# Lighter policy for individual developers running Claude/Cursor locally.
+# Alerts without blocking, except for the most dangerous patterns.
+
+rules:
+
+  # ── Always block: high-confidence attacks ──────────────────────
+
+  - name: "block_invisible_char_args"
+    description: "Block tool calls with zero-width/invisible Unicode in arguments (prompt injection)"
+    priority: 1
+    match:
+      arg_pattern: '[\u200b-\u200f\u202a-\u202e\ufeff]'
+    action: BLOCK
+
+  - name: "block_path_traversal"
+    description: "Block path traversal attempts"
+    priority: 2
+    match:
+      arg_pattern: '\.\./|\.\.\\|%2e%2e'
+    action: BLOCK
+
+  - name: "block_credential_files"
+    description: "Block access to known credential files"
+    priority: 3
+    match:
+      arg_pattern: '(?i)(\.env$|\.env\.|/\.aws/credentials|id_rsa$|id_ed25519$|\.pem$)'
+    action: BLOCK
+
+  - name: "block_prompt_injection_args"
+    description: "Block obvious prompt injection in arguments"
+    priority: 4
+    match:
+      arg_pattern: '(?i)ignore\s+(all\s+)?(previous|prior)\s+(instructions?|rules?)'
+    action: BLOCK
+
+  # ── Alert only: suspicious but may be legitimate ───────────────
+
+  - name: "alert_env_files"
+    description: "Alert on .env file access — may contain secrets"
+    priority: 20
+    match:
+      arg_pattern: '\.env'
+    action: ALERT
+
+  - name: "alert_ssh_access"
+    description: "Alert on SSH directory access"
+    priority: 21
+    match:
+      arg_pattern: '\.ssh/'
+    action: ALERT
+
+  - name: "alert_git_credentials"
+    description: "Alert on git credential files"
+    priority: 22
+    match:
+      arg_pattern: '\.git/config|\.gitconfig|\.netrc'
+    action: ALERT
+
+  - name: "alert_external_urls"
+    description: "Alert when tools call external URLs"
+    priority: 23
+    match:
+      arg_pattern: 'https?://(?!localhost|127\.|192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)'
+    action: ALERT
+
+  - name: "alert_shell_commands"
+    description: "Alert on shell execution"
+    priority: 24
+    match:
+      tool_pattern: '(?i)(shell|bash|exec|system|spawn)'
+    action: ALERT
