@@ -12,6 +12,7 @@ WORKDIR /app
 
 # Install dependencies first (layer caching)
 COPY pyproject.toml .
+COPY README.md . 
 RUN pip install --no-cache-dir ".[proxy,yaml]"
 
 # Copy source
