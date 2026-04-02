@@ -673,15 +673,15 @@ def run(filter_group: Optional[str] = None, verbose: bool = False):
             ms = (time.time() - t0) * 1000
             passed += 1
             if verbose:
-                print(f"    ✅  {name:<52} {ms:5.1f}ms")
+                print(f"      {name:<52} {ms:5.1f}ms")
             else:
-                print(f"    ✅  {name}")
+                print(f"      {name}")
         except Exception as exc:
             ms = (time.time() - t0) * 1000
             failed += 1
             tb = traceback.format_exc()
             failures.append((group, name, str(exc), tb))
-            print(f"    ❌  {name}")
+            print(f"      {name}")
             if verbose:
                 print(f"        {exc}")
 
@@ -690,9 +690,9 @@ def run(filter_group: Optional[str] = None, verbose: bool = False):
 
     print(f"\n  {'═' * WIDTH}")
     if failed == 0:
-        print(f"  🛡️  {total} tests — ALL {passed} PASSED  ({elapsed:.2f}s)")
+        print(f"    {total} tests — ALL {passed} PASSED  ({elapsed:.2f}s)")
     else:
-        print(f"  ⚠️  {total} tests — {passed} passed  {failed} FAILED  ({elapsed:.2f}s)")
+        print(f"    {total} tests — {passed} passed  {failed} FAILED  ({elapsed:.2f}s)")
         print(f"\n  Failed tests:")
         for g, n, msg, tb in failures:
             print(f"\n    [{g}] {n}")
