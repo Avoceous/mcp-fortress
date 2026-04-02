@@ -55,9 +55,9 @@ def test(group: str, name: str):
     return decorator
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # GROUP: TDIV — Tool Description Integrity Verifier
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 @test("TDIV", "Clean tool registers and verifies without alerts")
 def _():
@@ -160,9 +160,9 @@ def _():
     chk(typo == [], f"Unexpected typosquatting alerts: {[a.title for a in typo]}")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # GROUP: BAD — Behavioral Anomaly Detector
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 @test("BAD", "Single safe read produces no velocity alert")
 def _():
@@ -234,9 +234,9 @@ def _():
     chk(sess.risk_score > 0, f"Expected non-zero risk score, got {sess.risk_score}")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # GROUP: BRE — Blast Radius Estimator
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 def _read_manifest():
     return ToolManifest(name="read_file", description="Read a file.",
@@ -344,9 +344,9 @@ def _():
     chk(r1.score > r2.score, f"High-risk session should score higher: {r1.score} vs {r2.score}")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # GROUP: PII — Secret & PII Scanner
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 @test("PII", "AWS access key detected")
 def _():
@@ -421,9 +421,9 @@ def _():
     chk(r.has_findings)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # GROUP: POLICY — Policy-as-Code Firewall
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 @test("POLICY", "BLOCK rule matches path traversal argument")
 def _():
@@ -487,9 +487,9 @@ def _():
     chk(fw.evaluate(ToolCall(tool_name="safe_tool", arguments={})).action == SecurityAction.ALLOW)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # GROUP: CSTC — Cross-Session Correlator
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 @test("CSTC", "Multiple sessions from same IP triggers alert")
 def _():
@@ -544,9 +544,9 @@ def _():
         f"Expected HIGH/CRITICAL, got: {[a.severity for a in last_alerts]}")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # GROUP: PIPELINE — End-to-End Integration
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 def _pipeline_with_read_tool():
     pl = MCPFortressPipeline()
@@ -643,9 +643,9 @@ def _():
     chk("my_tool" in pl._tools, "Tool should be in registry after registration")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # Runner
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 def run(filter_group: Optional[str] = None, verbose: bool = False):
     tests = _TESTS
