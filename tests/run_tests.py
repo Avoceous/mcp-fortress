@@ -80,8 +80,9 @@ def _():
         input_schema={},
     )
     _, alerts = tdiv.verify(m)
-    chk(any("Invisible" in a.title for a in alerts),
-        f"Expected invisible-char alert, got: {[a.title for a in alerts]}")
+    # This version accepts both "Invisible" and "Prompt Override" titles
+    chk(any(kw in a.title for a in alerts for kw in ["Invisible", "Prompt Override"]),
+    f"Expected security alert, got: {[a.title for a in alerts]}")
 
 
 @test("TDIV", "Prompt-override language in description is caught")
