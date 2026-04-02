@@ -414,7 +414,7 @@ class ProxyServer:
         source_ip = request.client.host if request.client else "unknown"
 
         async def event_generator() -> AsyncIterator[str]:
-            async with httpx.AsyncClient(timeout=None) as client:
+            async with httpx.AsyncClient(timeout=30.0) as client:
                 async with client.stream("GET", f"{self._upstream}/mcp",
                                          headers=dict(request.headers)) as resp:
                     async for line in resp.aiter_lines():
