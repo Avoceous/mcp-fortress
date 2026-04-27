@@ -14,7 +14,7 @@ To report a security issue in MCP-Fortress:
 
 1. Email: security@[yourdomain].com
 2. Use GitHub's private vulnerability reporting:
-   `https://github.com/Avoceous/mcp-fortress/security/advisories/new`
+   `https://github.com/w1boost1889M/mcp-fortress/security/advisories/new`
 
 Include:
 - Description of the vulnerability
