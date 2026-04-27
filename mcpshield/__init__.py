@@ -3,15 +3,15 @@ MCP-Fortress
 ============
 Production-grade security firewall & proxy for AI Agent MCP.
 
-Author  : Avoceous <https://github.com/Avoceous>
+Author  : Avoceous <https://github.com/w1boost1889M>
 License : MIT
-Repo    : https://github.com/Avoceous/mcp-fortress
+Repo    : https://github.com/w1boost1889M/mcp-fortress
 """
 
 __version__ = "0.1.0"
 __author__  = "Avoceous"
 __license__ = "MIT"
-__url__     = "https://github.com/Avoceous/mcp-fortress"
+__url__     = "https://github.com/w1boost1889M/mcp-fortress"
 
 from mcpshield.core.models import (
     SecurityDecision,
