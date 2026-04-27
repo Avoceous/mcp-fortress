@@ -4,7 +4,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Author](https://github.com/w1boost1889M)
 [![Security: OWASP MCP Top 10](https://img.shields.io/badge/Security-OWASP%20MCP%20Top%2010-red.svg)](https://owasp.org/www-project-mcp-top-10/)
 
 > **The first open-source MCP security layer combining behavioral anomaly detection, cryptographic tool-integrity verification, blast-radius estimation, and cross-session threat correlation — built for real field usage in 2026.**
