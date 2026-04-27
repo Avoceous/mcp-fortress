@@ -5,7 +5,7 @@ Thank you for helping make AI agents safer. 🛡️
 ## Quick Start
 
 ```bash
-git clone https://github.com/Avoceous/mcp-fortress
+git clone https://github.com/w1boost1889M/mcp-fortress
 cd mcp-fortress
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
