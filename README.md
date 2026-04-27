@@ -292,6 +292,6 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Author
 
-**Avoceous** — [https://github.com/Avoceous](https://github.com/Avoceous)
+**w1boost1889M** — [https://github.com/Avoceous](https://github.com/w1boost1889M)
 
 *Built to protect AI agents and the clients they serve.*
