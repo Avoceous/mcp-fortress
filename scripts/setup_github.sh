@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-USERNAME="${1:-Avoceous}"
+USERNAME="${1:-w1boost1889M}"
 REPO="mcp-fortress"
 DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
