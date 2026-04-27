@@ -1,4 +1,4 @@
-# MCP-Fortress - by Avoceous (https://github.com/Avoceous) | MIT License
+# MCP-Fortress - by w1boost1889M (https://github.com/w1boost1889M) | MIT License
 """
 MCP-Fortress Self-Contained Test Runner
 ========================================
